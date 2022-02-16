@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang = "pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title> Wypożyczalnia samochodów CaRent</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script type="application/javascript" src="../../js/validationCommon.js"></script>
+</head>
+<body>
+    <header>
+        <h1>SportoweAuto</h1>
+        <img src="../../images/logo2.svg" alt="SportoweAuto">
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href = "/" class = "<%= navLocation == 'main' ? 'active' : ''%>" >Strona Główna</a></li>
+            <li><a href = "/cars" class = "<%= navLocation == 'cars' ? 'active' : ''%>" >Lista Samochodów</a></li>
+            <li><a href = "/clients" class = "<%= navLocation == 'clients' ? 'active' : ''%>">Lista Klientów</a></li>
+            <li><a href = "/rented_cars"  class = "<%= navLocation == 'rented_cars' ? 'active' : ''%>">Wypożyczone Samochody</a></li>
+        </ul>
+    </nav>

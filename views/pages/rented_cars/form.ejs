@@ -1,0 +1,99 @@
+<%- include('../../fragments/header.ejs') %>
+
+<main>
+    <h2><%= pageTitle %></h2> 
+    <form class="form" method="post" action="<%=formAction%>" novalidate>
+        <input type="hidden" name="_id" value="<%= Rentedcars._id %>">
+
+        <label for="client_id">Klient: <span class="symbol-required">* </span></label>
+        <select class="<%= validationErrors.find(e => e.path.includes('client_id')) ? 'error-input' : '' %>"  
+                name="client_id" id="client_id" required <%= (formMode == 'showDetails') ? 'disabled' : ''%>>
+            <option value="" selected>-----Wybierz Klienta----</option>
+            <% for (let i = 0; i < allClients.length; i++) {let client = allClients[i]; %>
+                <option value="<%= client._id %>" label ="<%= client.name  + ' ' + client.surname %>"
+                    <%= (Rentedcars._id && client._id.toString() == Rentedcars.client._id.toString()) ? 'selected' : ''%>></option>
+            <% } %>
+        </select>
+        <span id="errorClientID" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('client_id'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('client_id')).message %>
+            <% } %>
+        </span>
+
+        <label for="car_id">Samochód: <span class="symbol-required">* </span></label>
+        <select class="<%= validationErrors.find(e => e.path.includes('car_id')) ? 'error-input' : '' %>"  
+                name="car_id" id="car_id" required <%= (formMode == 'showDetails') ? 'disabled' : ''%>>
+            <option value="" selected>-----Wybierz Samochód----</option>
+            <% for (let i = 0; i < allCars.length; i++) {let car = allCars[i]; %>
+                <option value="<%= car._id %>" label ="<%= car.mark  + ' ' + car.model%>"
+                    <%= (Rentedcars._id && car._id.toString() == Rentedcars.car._id.toString()) ? 'selected' : ''%>></option>
+            <% } %>
+        </select>
+        <span id="errorCarID" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('car_id'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('car_id')).message %>
+            <% } %>
+        </span>
+
+        <label for="carRentalDay">Data Podpisania umowy: </label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('carRentalDay')) ? 'error-input' : '' %>"
+                type="date" name="carRentalDay" id="carRentalDay" value="<%= Rentedcars.carRentalDay %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorCarRentalDay" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('carRentalDay'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('carRentalDay')).message %>
+            <% } %>
+        </span>
+
+        <label for="rentedFor">Wypożyczony na: <span class="symbol-required">* </span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('rentedFor')) ? 'error-input' : '' %>"  
+                type="text" name="rentedFor" id="rentedFor" placeholder="2-50 znaków" value="<%= Rentedcars.rentedFor %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorRentedFor" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('rentedFor'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('rentedFor')).message %>
+            <% } %>
+        </span>
+
+        <label for="typeOfRent">Rodzaj wypożyczenia: <span class="symbol-required">* </span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('typeOfRent')) ? 'error-input' : '' %>"  
+                type="text" name="typeOfRent" id="typeOfRent" placeholder="2-50 znaków" value="<%= Rentedcars.typeOfRent %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorTypeOfRent" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('typeOfRent'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('typeOfRent')).message %>
+            <% } %>
+        </span>
+    
+        <label for="dayOfReturnCar">Samochód zwrócony dnia: </label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('dayOfReturnCar')) ? 'error-input' : '' %>"  
+                type="date" name="dayOfReturnCar" id="dayOfReturnCar" value="<%= Rentedcars.dayOfReturnCar %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorDayOfReturnCar" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('dayOfReturnCar'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('dayOfReturnCar')).message %>
+            <% } %>
+        </span>
+
+        <br>
+        <br>
+        
+        <% if(formMode =='showDetails') { %>
+            <div class="section-buttons">
+                <a href="/rented_cars/edit/<%= Rentedcars._id %>" class="list-actions-button-edit">Edytuj</a>
+            </div>
+        <% } %>
+
+        <br>
+        <br>
+        
+        <div class="form-buttons">
+            <p id="errorSumary" class="errors-text"></p>
+            <% if(formMode != 'showDetails') { %>
+                <input type="submit" class="form-button-submit" value="<%=btnLabel%>"/>
+                <a href='/rented_cars/' class="form-button-cancel">Anuluj</a>
+            <% } else { %>
+                <a href="/rented_cars" class="button-add">Powrot</a>
+            <% } %>
+    </form>
+    <script type="application/javascript" src="../../js/validationRentedCarsForm.js"></script>
+</main>
+
+
+<%- include('../../fragments/footer.ejs') %>

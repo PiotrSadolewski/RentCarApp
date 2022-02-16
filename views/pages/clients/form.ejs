@@ -1,0 +1,92 @@
+<%- include('../../fragments/header.ejs') %>
+
+<main>
+    <h2><%= pageTitle %></h2> 
+    <form class="form" method="post" action="<%=formAction%>" novalidate onsubmit="return validateForm();">
+        <input type="hidden" name="_id" value="<%= Client._id %>">
+
+        <label for="name">Imię: <span class="symbol-required">*</span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('name')) ? 'error-input' : '' %>" 
+                type="text" name="name" id="name" 
+                placeholder="2-60 znaków" value="<%= Client.name %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorName" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('name'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('name')).message %>
+            <% } %>
+        </span>
+
+        <label for="surname">Nazwisko: <span class="symbol-required">*</label>
+        <input class="<%= validationErrors.find(e => e.path.includes('surname')) ? 'error-input' : '' %>"
+               type="text" name="surname" id="surname" 
+               placeholder="2-60 znaków" value="<%= Client.surname %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorSurname" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('surname'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('surname')).message %>
+            <% } %>
+        </span>
+
+        <label for="phoneNumber">Numer telefonu: </label>
+        <input type="text" name="phoneNumber" id="phoneNumber" placeholder="+48" value="<%= Client.phoneNumber %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorPhoneNumber" class="error-text"></span>
+
+        <label for="drivingLicenseNumber">Numer prawojazdy: <span class="symbol-required">*</label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('drivingLicenseNumber')) ? 'error-input' : '' %>"
+                type="text" name="drivingLicenseNumber" id="drivingLicenseNumber" 
+                placeholder="6 znaków" value="<%= Client.drivingLicenseNumber %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorDrivingLicenseNumber" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('drivingLicenseNumber'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('drivingLicenseNumber')).message %>
+            <% } %>
+        </span>
+
+
+        <% if(formMode =='showDetails') { %>
+            <div class="section-buttons">
+                <a href="/clients/edit/<%= Client._id %>" class="list-actions-button-edit">Edytuj</a>
+            </div>
+        <% } %>
+
+        <% if(formMode =='showDetails') { %>
+            <br>
+            <h2>Wypożyczone samochody</h2>
+            <table class="table-list">
+                <thead>
+                    <tr>
+                        <th>Samochód</th>
+                        <th>Numer tablic rejestracyjnych</th>
+                        <th>Wypożyczony na</th>
+                        <th>Data podppisania umowy</th>
+                        <th>Samochód zwrócony dnia</th>
+                        <th>Rodzaj wypożyczenia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let C of Client.rentedcars) { %>
+                        <tr>
+                            <td><%= C.car.mark + ' ' + C.car.model %></td>
+                            <td><%= C.car.licensePlateNumber %></td>
+                            <td><%= C.rentedFor %></td>
+                            <td><%= C.carRentalDay %></td> 
+                            <td><%= C.dayOfReturnCar %></td>
+                            <td><%= C.typeOfRent %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            
+        <% } %>
+        
+        <div class="form-buttons">
+            <p id="errorSummary" class="errors-text"></p>
+            <% if(formMode != 'showDetails') { %>
+                <input type="submit" class="form-button-submit" value="<%=btnLabel%>"/>
+                <a href="/clients" class="form-button-cancel">Anuluj</a>
+            <% } else { %>
+                <a href="/clients" class="button-add">Powrot</a>
+            <% } %>
+        </div>
+    </form>
+    <script type="application/javascript" src="../../js/validationClientsForm.js"></script>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>

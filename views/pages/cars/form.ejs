@@ -1,0 +1,102 @@
+<%- include('../../fragments/header.ejs') %>
+
+<main>
+    <h2><%= pageTitle %></h2>
+    <form class="form" method="post" action="<%=formAction%>" novalidate>
+        <input type="hidden" name="_id" value="<%= Car._id %>">
+
+        <label for="mark">Marka: <span class="symbol-required">*</span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('mark')) ? 'error-input' : '' %>"  
+                type="text" name="mark" id="mark" placeholder="2-50 znaków" value="<%= Car.mark %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorMark" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('mark'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('mark')).message %>
+            <% } %>
+        </span>
+
+        <label for="model">Model: <span class="symbol-required">* </span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('model')) ? 'error-input' : '' %>"  
+                type="text" name="model" id="model" placeholder="2-50 znaków" value="<%= Car.model %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorModel" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('model'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('model')).message %>
+            <% } %>
+        </span>
+
+        <label for="dayOfProduction">Data Produkcji: <span class="symbol-required">* </span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('dayOfProduction')) ? 'error-input' : '' %>"  
+                type="date" name="dayOfProduction" id="dayOfProduction" value="<%= Car.dayOfProduction %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorDayOfProduction" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('dayOfProduction'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('dayOfProduction')).message %>
+            <% } %>
+        </span>
+
+        <label for="pricePerDay">Cena Wypożyczenia za 1h: <span class="symbol-required">* </span></label>
+        <input  class="<%= validationErrors.find(e => e.path.includes('pricePerDay')) ? 'error-input' : '' %>"  
+                type="text" name="pricePerDay" id="pricePerDay" placeholder="PLN" value="<%= Car.pricePerDay %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required />
+        <span id="errorPricePerDay" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('pricePerDay'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('pricePerDay')).message %>
+            <% } %>
+        </span>
+
+        <label for="licensePlateNumber">Numer Tablic Rejestracyjnych: <span class="symbol-required">* </span></label>
+        <input   class="<%= validationErrors.find(e => e.path.includes('licensePlateNumber')) ? 'error-input' : '' %>"
+                type="text" name="licensePlateNumber" id="licensePlateNumber" placeholder="2-15 znaków" value="<%= Car.licensePlateNumber %>" <%= (formMode == 'showDetails') ? 'disabled' : '' %> required/>
+        <span id="errorLicensePlateNumber" class="error-text">
+            <% if(validationErrors.find(e => e.path.includes('licensePlateNumber'))) { %>
+                <%= validationErrors.find(e =>e.path.includes('licensePlateNumber')).message %>
+            <% } %>
+        </span>
+        
+        <% if(formMode =='showDetails') { %>
+            <div class="section-buttons">
+                <a href="/cars/edit/<%= Car._id %>" class="list-actions-button-edit">Edytuj</a>
+            </div>
+        <% } %>
+
+        <% if(formMode =='showDetails') { %>
+            <br>
+            <h2>Wypożyczenia</h2>
+            <table class="table-list">
+                <thead>
+                    <tr>
+                        <th>Imię i nazwisko klienta</th>
+                        <th>Wypożyczony na</th>
+                        <th>Data podppisania umowy</th>
+                        <th>Samochód zwrócony dnia</th>
+                        <th>Rodzaj wypożyczenia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let C of Car.rentedcars) { %>
+                        <tr>
+                            <td><%= C.client.name + ' ' + C.client.surname %></td>
+                            <td><%= C.rentedFor %></td>
+                            <td><%= C.carRentalDay %></td> 
+                            <td><%= C.dayOfReturnCar %></td>
+                            <td><%= C.typeOfRent %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            
+        <% } %>
+
+        <br>
+        <br>
+        
+        <div class="form-buttons">
+            <p id="errorSumary" class="errors-text"></p>
+            <% if(formMode != 'showDetails') { %>
+                <input type="submit" class="form-button-submit" value="<%=btnLabel%>"/>
+                <a href='/cars/' class="form-button-cancel">Anuluj</a>
+            <% } else { %>
+                <a href="/cars" class="button-add">Powrot</a>
+            <% } %>
+    </form>
+    <script type="application/javascript" src="../../js/validationCarsForm.js"></script>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>
